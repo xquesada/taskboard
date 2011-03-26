@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  should_have_attached_file :avatar
+#  should_have_attached_file :avatar
 
   context "User" do
     setup do
@@ -319,6 +319,26 @@ class UserTest < ActiveSupport::TestCase
     should "return the organization admins for the organizations the user belongs to" do
       assert_equal [@org_admin, @org_admin2], @user.administrators
     end
+  end
+  
+  context "#send_password_reset_information" do
+    setup do
+      ActionMailer::Base.deliveries.clear
+      assert ActionMailer::Base.deliveries.empty?
+      @user = Factory(:user)
+    end
+
+    should "reset perishable token" do
+      @old_token = @user.perishable_token
+      @user.send_password_reset_information
+      assert @user.perishable_token != @old_token 
+    end
+
+    should "send an email" do
+      @user.send_password_reset_information
+      assert !ActionMailer::Base.deliveries.empty?
+    end
+  
   end
 
 end

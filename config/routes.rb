@@ -7,7 +7,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users, :only => [ :new, :create, :edit, :update, :destroy ]
   map.resource :account, :controller => "users"
-
+  map.resources :reset_password_requests, :only => [ :new, :create, :edit, :update]
+  
   map.resources :organizations do |o|
     o.resources :projects, :only => [ :show, :new, :create, :edit, :update, :destroy]
     # o.resources :guest_team_memberships, :only => [ :new ] 
